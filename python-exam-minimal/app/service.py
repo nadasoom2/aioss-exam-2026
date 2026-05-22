@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from hashlib import sha256
 
 
 @dataclass
@@ -9,16 +10,12 @@ class RecommendationResult:
 
 
 def old_recommender(user_id: str) -> RecommendationResult:
-    # TODO: baseline 추천 로직을 구현하세요.
-    # 조건:
-    # - model 필드는 "baseline-v1"
-    # - score는 0.0~1.0 범위 float
-    raise NotImplementedError("TODO: old_recommender")
+    digest = sha256(user_id.encode("utf-8")).digest()
+    score = digest[0] / 255.0
+    return RecommendationResult(user_id=user_id, model="baseline-v1", score=score)
 
 
 def next_recommender(user_id: str) -> RecommendationResult:
-    # TODO: 신규 추천 로직을 구현하세요.
-    # 조건:
-    # - model 필드는 "next-v2"
-    # - old_recommender 대비 개선된 score 전략을 정의
-    raise NotImplementedError("TODO: next_recommender")
+    baseline = old_recommender(user_id)
+    score = min(1.0, baseline.score + 0.12)
+    return RecommendationResult(user_id=user_id, model="next-v2", score=score)
