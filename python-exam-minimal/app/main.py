@@ -8,15 +8,17 @@ app = FastAPI(title="AI OSS Exam API (Minimal)", version="0.1.0")
 
 @app.get("/health")
 def health() -> dict[str, str]:
-    # TODO: 상태 점검 응답을 구현하세요.
-    raise NotImplementedError("TODO: /health")
+    return {"status": "ok"}
 
 
 @app.get("/recommendation")
 def recommendation(user_id: str = Query(..., min_length=3)) -> dict[str, str | float]:
-    # TODO: Feature Flag에 따라 old/new recommender를 선택하고
-    #       표준 응답(JSON)을 반환하세요.
-    raise NotImplementedError("TODO: /recommendation")
+    result = next_recommender(user_id) if is_next_recommender_enabled(user_id) else old_recommender(user_id)
+    return {
+        "user_id": result.user_id,
+        "model": result.model,
+        "score": result.score,
+    }
 
 
 if __name__ == "__main__":

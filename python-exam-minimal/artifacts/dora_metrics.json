@@ -1,0 +1,7 @@
+{
+  "generated_at_utc": "2026-05-22T05:59:24.281855+00:00",
+  "lead_time_hours": 4.5,
+  "deployment_frequency_per_week": 3.0,
+  "mttr_minutes": 18,
+  "change_failure_rate_percent": 2.5
+}
